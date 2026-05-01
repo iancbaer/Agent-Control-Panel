@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Rook Control">
+  <rect x="8" y="8" width="112" height="112" rx="14" fill="#111318"/>
+  <rect x="8.75" y="8.75" width="110.5" height="110.5" rx="13.25" fill="none" stroke="#3a4655" stroke-width="1.5"/>
+  <path d="M40 34h48v9H40z" fill="#d7dde5"/>
+  <path d="M47 43h34v39H47z" fill="#d7dde5"/>
+  <path d="M42 82h44v9H42z" fill="#d7dde5"/>
+  <path d="M36 91h56v8H36z" fill="#d7dde5"/>
+  <path d="M55 59h18v23H55z" fill="#111318"/>
+  <path d="M40 34v-8h10v8M59 34v-8h10v8M78 34v-8h10v8" stroke="#d7dde5" stroke-width="8" stroke-linecap="square"/>
+</svg>
