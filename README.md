@@ -1,8 +1,8 @@
-# Local AI Control
+# Agent Control Panel
 
 A native GNOME/GTK desktop control panel for local AI agent stacks.
 
-Local AI Control gives you one place to watch and manage the moving parts around a desktop agent setup: service status, Ollama models, automation jobs, token usage, memory services, logs, project tasks, and local note vault graph previews.
+Agent Control Panel gives you one place to watch and manage the moving parts around a desktop agent setup: service status, Ollama models, automation jobs, token usage, memory services, logs, project tasks, and local note vault graph previews.
 
 ## Features
 
@@ -40,8 +40,8 @@ sudo apt install python3-gi gir1.2-gtk-3.0 python3-yaml python3-cairo
 Clone the repo, then install the launcher and icon into your user desktop locations:
 
 ```bash
-git clone https://github.com/iancbaer/rook-control.git
-cd rook-control
+git clone https://github.com/iancbaer/Agent-Control-Panel.git
+cd Agent-Control-Panel
 chmod +x launch-local-ai-control.sh local_ai_control.py
 
 mkdir -p ~/.local/share/applications ~/.local/share/icons/hicolor/scalable/apps
