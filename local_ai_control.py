@@ -16,8 +16,8 @@ import cairo
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gtk, Gdk
 
-APP_ID = "local.hermes.Control"
-ICON_NAME = "rook-control"
+APP_ID = "io.github.iancbaer.LocalAIControl"
+ICON_NAME = "local-ai-control"
 
 
 HOME = Path.home()
@@ -25,10 +25,10 @@ HERMES = HOME / ".hermes"
 HERMES_SERVICE = "hermes-gateway.service"
 DESKTOP_SESSION_FILE = HOME / ".hermes/desktop-control-session.json"
 APP_DIR = Path(__file__).resolve().parent
-ICON_PATH = APP_DIR / "hermes-control.svg"
-HERMES_PYTHON = "/home/iancbaer/.hermes/hermes-agent/venv/bin/python"
-PROJECTS_FILE = HERMES / "rook-projects.json"
-OBSIDIAN_GRAPH_FILE = HERMES / "rook-obsidian-graph.png"
+ICON_PATH = APP_DIR / "local-ai-control.svg"
+HERMES_PYTHON = os.environ.get("HERMES_PYTHON", str(HOME / ".hermes/hermes-agent/venv/bin/python"))
+PROJECTS_FILE = HERMES / "local-ai-control-projects.json"
+OBSIDIAN_GRAPH_FILE = HERMES / "local-ai-control-obsidian-graph.png"
 STATE_DB = HERMES / "state.db"
 
 
@@ -81,9 +81,7 @@ def discover_obsidian_vaults():
     candidates = []
     for root in [
         HOME / "Documents/Obsidian Vault",
-        HOME / "Documents/99_Archives/Other/11_Desktop/Desktop-Archive/Rook-Brain",
-        HOME / "Documents/01_Business/Rook",
-        HOME / "wiki",
+                HOME / "wiki",
     ]:
         if root.exists() and any(root.rglob("*.md")):
             candidates.append(root)
@@ -620,9 +618,9 @@ def short_unix_time(value):
         return "-"
 
 
-class HermesControl(Gtk.Application):
+class LocalAIControl(Gtk.Application):
     def __init__(self):
-        GLib.set_application_name("Rook Control")
+        GLib.set_application_name("Local AI Control")
         GLib.set_prgname(APP_ID)
         try:
             Gtk.Window.set_default_icon_name(ICON_NAME)
@@ -676,7 +674,7 @@ class HermesControl(Gtk.Application):
             self.window.present()
             return
         self.window = Gtk.ApplicationWindow(application=self)
-        self.window.set_title("Rook Control")
+        self.window.set_title("Local AI Control")
         self.window.set_default_size(1180, 820)
         self.window.set_position(Gtk.WindowPosition.CENTER)
         try:
@@ -766,8 +764,8 @@ class HermesControl(Gtk.Application):
         title_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
         title_box.set_hexpand(True)
         header.pack_start(title_box, True, True, 0)
-        title = self.label("Rook Control", "title")
-        subtitle = self.label("Local agent console", "muted")
+        title = self.label("Local AI Control", "title")
+        subtitle = self.label("Local AI operations console", "muted")
         self.updated_label = self.label("Loading", "muted")
         title_box.pack_start(title, False, False, 0)
         title_box.pack_start(subtitle, False, False, 0)
@@ -805,7 +803,7 @@ class HermesControl(Gtk.Application):
         main_stack.add_titled(token_content, "tokens", "Token Burn")
 
         projects_content = self.page_container()
-        self.projects_card = self.card("Ian's Projects")
+        self.projects_card = self.card("Projects")
         projects_content.content_box.pack_start(self.projects_card, True, True, 0)
         self.project_tree = self.tree(["Quest", "Status", "Area", "Priority", "Due"], data_columns=1)
         self.configure_project_tree()
@@ -822,7 +820,7 @@ class HermesControl(Gtk.Application):
         status_grid = Gtk.Grid(column_spacing=14, row_spacing=14)
         system_content.content_box.pack_start(status_grid, False, False, 0)
         self.model_card = self.card("Default Model")
-        self.agent_card = self.card("Rook Status")
+        self.agent_card = self.card("Agent Status")
         self.resources_card = self.card("Local Resources")
         self.memory_card = self.card("Memory")
         self.gateway_card = self.card("Gateway Controls")
@@ -1004,7 +1002,7 @@ class HermesControl(Gtk.Application):
         self.obsidian_vault_combo = Gtk.ComboBoxText()
         self.obsidian_vaults = discover_obsidian_vaults()
         if self.obsidian_vaults:
-            self.obsidian_vault_combo.append_text("Combined: Ian + Rook")
+            self.obsidian_vault_combo.append_text("Combined vaults")
         for vault in self.obsidian_vaults:
             self.obsidian_vault_combo.append_text(str(vault))
         self.obsidian_vault_combo.set_active(0)
@@ -1246,7 +1244,7 @@ print(f"Default model set to {provider or 'auto'} · {model}")
             ok, out, err = run(
                 [HERMES_PYTHON, "-c", code, provider, model],
                 timeout=20,
-                cwd="/home/iancbaer/.hermes/hermes-agent",
+                cwd=str(HOME / ".hermes/hermes-agent"),
             )
             GLib.idle_add(self.show_message, out or err or ("Default model saved." if ok else "Failed to save model."))
             self.refresh()
@@ -1340,7 +1338,7 @@ print(f"Updated {job.get('name', job_id)}: {provider_label} · {model_label}")
             ok, out, err = run(
                 [HERMES_PYTHON, "-c", code, job_id, provider, model],
                 timeout=20,
-                cwd="/home/iancbaer/.hermes/hermes-agent",
+                cwd=str(HOME / ".hermes/hermes-agent"),
             )
             GLib.idle_add(self.show_message, out or err or ("Cron job model updated." if ok else "Failed to update cron job model."))
             self.refresh()
@@ -1352,9 +1350,9 @@ print(f"Updated {job.get('name', job_id)}: {provider_label} · {model_label}")
         header = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         title_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
         title_box.set_hexpand(True)
-        title_box.pack_start(self.label("Speak to Rook", "chat-title"), False, False, 0)
+        title_box.pack_start(self.label("Chat with your agent", "chat-title"), False, False, 0)
         title_box.pack_start(
-            self.label("Desktop session continuity, bounded turns, memory providers off for local safety.", "chat-meta"),
+            self.label("Desktop session continuity, bounded turns, and local-first controls.", "chat-meta"),
             False,
             False,
             0,
@@ -2369,20 +2367,20 @@ print(f"Updated {job.get('name', job_id)}: {provider_label} · {model_label}")
     def send_chat(self):
         prompt = self.get_chat_input()
         if not prompt:
-            self.show_message("Type a message for Rook first.")
+            self.show_message("Type a message for the agent first.")
             return
         if self.chat_proc and self.chat_proc.poll() is None:
-            self.show_message("Rook is already replying. Stop it first if needed.")
+            self.show_message("The agent is already replying. Stop it first if needed.")
             return
 
         self.chat_input.get_buffer().set_text("")
-        GLib.idle_add(self.append_chat_output, f"You:\n{prompt}\n\nRook:\nThinking...")
-        GLib.idle_add(self.set_chat_status, "Rook is replying", "warn")
+        GLib.idle_add(self.append_chat_output, f"You:\n{prompt}\n\nAgent:\nThinking...")
+        GLib.idle_add(self.set_chat_status, "Agent is replying", "warn")
         threading.Thread(target=self.chat_worker, args=(prompt,), daemon=True).start()
 
     def chat_worker(self, prompt):
         command = [
-            "/home/iancbaer/.hermes/hermes-agent/venv/bin/python",
+            HERMES_PYTHON,
             "-m",
             "hermes_cli.main",
             "chat",
@@ -2430,7 +2428,7 @@ print(f"Updated {job.get('name', job_id)}: {provider_label} · {model_label}")
         text = (out or err or "").strip()
         text = self.capture_session_id(text)
         if not text:
-            text = f"Rook exited with code {code} and no output."
+            text = f"Agent exited with code {code} and no output."
         if code == 0:
             GLib.idle_add(self.replace_last_thinking, text)
             GLib.idle_add(self.set_chat_status, "Ready", "good")
@@ -2469,9 +2467,9 @@ print(f"Updated {job.get('name', job_id)}: {provider_label} · {model_label}")
         buffer = self.chat_output.get_buffer()
         start, end = buffer.get_bounds()
         current = buffer.get_text(start, end, True)
-        marker = "Rook:\nThinking..."
+        marker = "Agent:\nThinking..."
         if marker in current:
-            current = current.rsplit(marker, 1)[0] + f"Rook:\n{text}"
+            current = current.rsplit(marker, 1)[0] + f"Agent:\n{text}"
         else:
             current = current + "\n\n" + text
         buffer.set_text(current)
@@ -2498,5 +2496,5 @@ print(f"Updated {job.get('name', job_id)}: {provider_label} · {model_label}")
 
 
 if __name__ == "__main__":
-    app = HermesControl()
+    app = LocalAIControl()
     raise SystemExit(app.run(None))

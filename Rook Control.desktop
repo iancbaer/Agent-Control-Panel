@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Rook Control
-Comment=Native desktop control panel for Rook, Ollama, cron, and memory
-Exec=/home/iancbaer/Documents/01_Business/local-llm-stack/hermes-desktop-control/launch-hermes-control.sh
-Icon=rook-control
-Terminal=false
-Categories=System;Monitor;
-StartupNotify=true

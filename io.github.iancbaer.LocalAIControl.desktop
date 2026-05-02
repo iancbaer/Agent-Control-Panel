@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Local AI Control
+GenericName=Local AI Control Panel
+Comment=Native desktop control panel for local AI agents, Ollama, automations, and memory services
+Exec=launch-local-ai-control.sh
+Icon=local-ai-control
+Terminal=false
+Categories=System;Monitor;
+StartupNotify=true
+StartupWMClass=io.github.iancbaer.LocalAIControl
+Keywords=AI;Agent;Hermes;Ollama;Control;Cron;Memory;
