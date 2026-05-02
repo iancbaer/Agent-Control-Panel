@@ -40,8 +40,8 @@ sudo apt install python3-gi gir1.2-gtk-3.0 python3-yaml python3-cairo
 Clone the repo, then install the launcher and icon into your user desktop locations:
 
 ```bash
-git clone https://github.com/iancbaer/local-ai-control.git
-cd local-ai-control
+git clone https://github.com/iancbaer/rook-control.git
+cd rook-control
 chmod +x launch-local-ai-control.sh local_ai_control.py
 
 mkdir -p ~/.local/share/applications ~/.local/share/icons/hicolor/scalable/apps
